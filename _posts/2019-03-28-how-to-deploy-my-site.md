@@ -58,12 +58,8 @@ intend to organize my development:
   "build"/rendered code. In some senses I'm using this as a sort of "staging"
   branch where I stage built code from the `dev` branch and then push it to `master`
 * `master`: This Github Pages reads from by default. Thus, in order to get `master`
-  up to date with the `gh-pages` branch, we can simply run:
-
-      $ git branch -u gh-pages
-      $ git rebase gh-pages
-      $ git push origin master
-
+  up to date with the `gh-pages` branch, we can simply rebase `master` on the 
+  `gh-pages` branch (see below for commands).
 
 ## Making Changes and Deploying
 
@@ -72,14 +68,40 @@ installed):
 
 ### Build Docker Image
 
-    $ cd <DIR_WITH_DOCKERFILE>
-    $ docker build --tag=<TAG_NAME> .
+{% highlight bash %}
+$ cd <DIR_WITH_DOCKERFILE>
+$ docker build --tag=<TAG_NAME> .
+{% endhighlight %}
 
 ### Start Docker Container
 
-    $ docker run --network host -it <TAG_NAME> # Default user is root; definitely needs to be changed
-    $ npm run local
-    $ git pull
+{% highlight bash %}
+$ docker run --network host -it <TAG_NAME> # Default user is root; definitely needs to be changed
+$ npm run local
+{% endhighlight %}
 
+### Commit/Push Changes to `dev` Branch
 
+{% highlight bash %}
+$ git pull
+# Make appropriate changes
+$ git add <MODIFIED_FILES>
+$ git commit -m "<COMMIT_MESSAGE>"
+$ git push origin dev
+{% endhighlight %}
+
+### Stage Changes to `gh-pages`
+
+{% highlight bash %}
+$ npm run publish # Creation and updating of gh-pages automatically handled by theme's code
+{% endhighlight %}
+
+### Push to `master` (Prod)
+
+{% highlight bash %}
+$ git checkout master
+$ git branch -u gh-pages
+$ git rebase gh-pages
+$ git push origin master
+{% endhighlight %}
 
